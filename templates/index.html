@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explainable Multi-Agent AI System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Explainable Multi-Agent AI System</h1>
+            <p>Enter a query to see how the agents interact and make decisions.</p>
+        </header>
+
+        <section class="search-section">
+            <form id="query-form">
+                <input type="text" id="query-input" placeholder="e.g. 'best AI to learn coding'" required>
+                <button type="submit" id="submit-btn">Analyze</button>
+            </form>
+        </section>
+
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Agents are thinking...</p>
+        </div>
+
+        <div id="dashboard" class="hidden">
+            <!-- Agent Flow Visual -->
+            <section class="flow-section">
+                <h2>Agent Pipeline</h2>
+                <div class="flow-visual">
+                    <div class="flow-node planner-node">Planner</div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node researcher-node">Researcher</div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node decision-node">Decision</div>
+                </div>
+            </section>
+
+            <div class="grid-container">
+                <!-- Agent Cards -->
+                <section class="cards-section">
+                    <h2>Agent Reasoning</h2>
+                    
+                    <div class="agent-card">
+                        <h3>1. Planner Agent</h3>
+                        <div class="card-content">
+                            <p><strong>Intent:</strong> <span id="planner-intent"></span></p>
+                            <p><strong>Keywords:</strong> <span id="planner-keywords" class="badge-container"></span></p>
+                            <p><strong>Reasoning:</strong> <span id="planner-reasoning"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="agent-card">
+                        <h3>2. Researcher Agent</h3>
+                        <div class="card-content">
+                            <p><strong>Matched Topic:</strong> <span id="researcher-topic"></span></p>
+                            <p><strong>Retrieved Facts:</strong></p>
+                            <ul id="researcher-facts"></ul>
+                            <p><strong>Reasoning:</strong> <span id="researcher-reasoning"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="agent-card highlight-card">
+                        <h3>3. Decision Agent</h3>
+                        <div class="card-content">
+                            <p><strong>Confidence:</strong></p>
+                            <div class="progress-bar-container">
+                                <div id="confidence-bar" class="progress-bar" style="width: 0%;">0%</div>
+                            </div>
+                            <p><strong>Reasoning Steps:</strong></p>
+                            <ul id="decision-reasoning"></ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sidebar: Timeline & Output -->
+                <aside class="sidebar">
+                    <div class="final-output-card">
+                        <h2>Final Answer</h2>
+                        <div id="final-answer" class="output-text"></div>
+                    </div>
+
+                    <div class="timeline-card">
+                        <h2>Interaction Timeline</h2>
+                        <ul id="interaction-timeline" class="timeline">
+                            <!-- Timeline items injected here -->
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
