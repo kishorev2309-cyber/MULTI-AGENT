@@ -1,6 +1,6 @@
-# 🚀 Explainable Multi-Agent AI System
+#  Explainable Multi-Agent AI System
 
-## 📌 Overview
+## Overview
 This project is an **Explainable Multi-Agent AI System** developed for a hackathon.
 
 Unlike traditional AI systems that only give answers, this system shows:
@@ -10,13 +10,13 @@ Unlike traditional AI systems that only give answers, this system shows:
 
 ---
 
-## 🧠 Problem Statement
+## Problem Statement
 **Input:** Multi-agent decisions and interactions  
 **Output:** Explainability visualization framework  
 
 ---
 
-## ⚙️ Architecture
+## Architecture
 
 The system uses a **3-agent pipeline**:
 
@@ -38,7 +38,7 @@ The system uses a **3-agent pipeline**:
 
 ---
 
-## 🔄 Workflow
+## Workflow
 
 User Query  
 → Planner Agent  
@@ -48,7 +48,7 @@ User Query
 
 ---
 
-## 🌐 Features
+## Features
 
 - Multi-agent architecture  
 - Explainable decision-making  
@@ -59,7 +59,7 @@ User Query
 
 ---
 
-## 🖥️ Tech Stack
+## Tech Stack
 
 - Backend: Python (Flask)  
 - Frontend: HTML, CSS, JavaScript  
@@ -67,4 +67,4 @@ User Query
 
 ---
 
-## 📂 Project Structure
+## Project Structure
