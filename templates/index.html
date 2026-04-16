@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cognitive Reasoning Framework</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Cognitive Reasoning Framework</h1>
+            <p>Live Evidence-Based Retrieval and Qualitative Inference Analysis</p>
+        </header>
+
+        <section class="search-section">
+            <form id="query-form">
+                <div class="input-wrapper">
+                    <input type="text" id="query-input" placeholder="Initiate research query (e.g. latest developments in quantum computing...)" required>
+                    <button type="submit" id="submit-btn">Execute Agent Pipeline</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Dynamic Professional Loading State -->
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <h3 class="loading-status">Constructing Query Understanding...</h3>
+            <p class="loading-substatus" id="loading-substatus">Classifying intent & decomposing context</p>
+            
+            <div class="flow-visual processing">
+                <div class="flow-node active-pulse">Planner</div>
+                <div class="flow-arrow opacity-half">➔</div>
+                <div class="flow-node opacity-half">Researcher</div>
+                <div class="flow-arrow opacity-half">➔</div>
+                <div class="flow-node opacity-half">Decision</div>
+            </div>
+        </div>
+
+        <div id="dashboard" class="hidden dashboard-grid">
+            <!-- Agent Logic Sequence Graphic -->
+            <div class="header-flow">
+                <div class="flow-visual">
+                    <div class="flow-node complete">Planner</div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node complete">Researcher</div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node complete">Decision</div>
+                </div>
+            </div>
+
+            <!-- Col 1: Planner & Researcher (Context & Evidence) -->
+            <div class="left-panel">
+                <div class="panel-card planner-card">
+                    <div class="card-header">
+                        <h2>Query Understanding Mapping</h2>
+                        <span class="tag intent-tag" id="intent-tag">Intent mapping</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>Sub-Question Decomposition</h4>
+                        <ul id="sub-questions" class="academic-list"></ul>
+                        
+                        <h4 class="mt-4">Search Strategy Generated</h4>
+                        <div id="search-strategies" class="badge-row mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="panel-card researcher-card mt-4">
+                    <div class="card-header">
+                        <h2>Live Evidence Retrieval</h2>
+                        <span class="tag evidence-tag"><span id="evidence-count">0</span> Data Points Inspected</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="evidence-clusters" class="evidence-scroll-area">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 2: Decision (Synthesized Conclusion) -->
+            <div class="right-panel">
+                <div class="panel-card decision-card">
+                    <div class="card-header border-bottom">
+                        <h2>Cognitive Synthesis & Final Conclusion</h2>
+                    </div>
+                    <div class="card-body large-text synthesis-box">
+                        <p id="final-answer" class="text-glow"></p>
+                    </div>
+                </div>
+
+                <div class="panel-card mt-4">
+                    <div class="card-header">
+                        <h2>Reasoning Trace</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul id="reasoning-chain" class="step-trace-list"></ul>
+                    </div>
+                </div>
+
+                <div class="panel-card mt-4 anomaly-card">
+                    <div class="card-header">
+                        <h2>Alternative Interpretations</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul id="alternative-viewpoints" class="academic-list alt-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
