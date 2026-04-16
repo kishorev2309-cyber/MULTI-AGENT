@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from agents.planner import run_planner
 from agents.researcher import run_researcher
 from agents.decision import run_decision
+import os
 
 app = Flask(__name__)
 
@@ -43,5 +44,6 @@ def analyze():
             "fallback_trigger": True
         }), 500
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
