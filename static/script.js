@@ -28,27 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ query })
             });
 
-            if (!response.ok) throw new Error('API Execution Error');
+            // Always parse JSON regardless of HTTP status code
+            // Backend is designed to always return valid JSON even on errors
+            let data;
+            try {
+                data = await response.json();
+            } catch (parseErr) {
+                // Only show failure if JSON itself is unparseable (true network/server crash)
+                throw new Error('Server returned unparseable response. Backend may be down.');
+            }
 
-            const data = await response.json();
             console.log("Backend Response:", data);
-            
-            // Render the logic
-            populateDashboard(data);
-            
-            // Swap view
+
+            // Show dashboard regardless — populateDashboard handles degraded states
             loading.classList.add('hidden');
             dashboard.classList.remove('hidden');
-            
+            populateDashboard(data);
+
         } catch (error) {
-            console.error('Error fetching cognitive analysis:', error);
-            loadStatus.textContent = "Pipeline Execution Failure";
+            console.error('Fatal pipeline error (server unreachable):', error);
+            loadStatus.textContent = "Cannot reach backend server";
             loadStatus.style.color = "#ef4444";
-            subStatus.textContent = "Ensure backend server routing is live and network is available.";
-            
-            // Stop loading animation
+            subStatus.textContent = error.message || "Ensure the Flask server is running and accessible.";
             loadNodes.forEach(n => n.classList.remove('active-pulse'));
-            clearInterval(window.loadingInterval);
         }
     });
 
