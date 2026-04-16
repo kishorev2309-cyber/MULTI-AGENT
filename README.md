@@ -20,17 +20,17 @@ Unlike traditional AI systems that only give answers, this system shows:
 
 The system uses a **3-agent pipeline**:
 
-### 1️⃣ Planner Agent
+### 1️ Planner Agent
 - Analyzes user query  
 - Identifies intent  
 - Extracts keywords  
 
-### 2️⃣ Researcher Agent
+### 2️ Researcher Agent
 - Matches query to a topic  
 - Retrieves relevant facts  
 - Provides reasoning for topic selection  
 
-### 3️⃣ Decision Agent
+### 3️ Decision Agent
 - Analyzes facts  
 - Generates final answer  
 - Assigns confidence score  
