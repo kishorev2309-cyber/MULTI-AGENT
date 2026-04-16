@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('API Execution Error');
 
             const data = await response.json();
+            console.log("Backend Response:", data);
             
             // Render the logic
             populateDashboard(data);
@@ -95,18 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateDashboard(data) {
         
         // Handle degraded state graceful UI
-        if(data.error) {
-            document.getElementById('final-answer').textContent = "System Degraded: " + data.message;
+        if(data.error || !data.planner || !data.researcher || !data.decision) {
+            document.getElementById('final-answer').textContent = "System Degraded: " + (data.message || "Invalid JSON schema received.");
             return;
         }
 
         /* 1. PLANNER DOM UPDATES */
-        document.getElementById('intent-tag').textContent = `Intent: ${data.planner.intent}`;
+        document.getElementById('intent-tag').textContent = `Intent: ${data.planner.intent || 'Unknown'}`;
         
         // Subquestions
         const subList = document.getElementById('sub-questions');
         subList.innerHTML = '';
-        data.planner.sub_questions.forEach(sq => {
+        (data.planner.sub_questions || []).forEach(sq => {
             const li = document.createElement('li');
             li.textContent = sq;
             subList.appendChild(li);
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Search Strategies
         const stratRow = document.getElementById('search-strategies');
         stratRow.innerHTML = '';
-        data.planner.search_strategies.forEach(ss => {
+        (data.planner.search_strategies || []).forEach(ss => {
             const s = document.createElement('span');
             s.className = 'badge';
             s.textContent = ss.length > 30 ? ss.substring(0,30) + '...' : ss;
@@ -123,11 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         /* 2. RESEARCHER DOM UPDATES */
-        document.getElementById('evidence-count').textContent = data.researcher.total_evidence_points;
+        document.getElementById('evidence-count').textContent = data.researcher.total_evidence_points || 0;
         const eviContainer = document.getElementById('evidence-clusters');
         eviContainer.innerHTML = '';
         
-        const clusters = data.researcher.grouped_insights;
+        const clusters = data.researcher.grouped_insights || {};
         for (const [strategy, results] of Object.entries(clusters)) {
             // Group Title
             const title = document.createElement('div');
@@ -136,15 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             eviContainer.appendChild(title);
             
             // Group Results
-            results.forEach(res => {
+            (results || []).forEach(res => {
                 const item = document.createElement('div');
                 item.className = 'evidence-item';
                 
                 const urlObj = res.source_link ? getHostName(res.source_link) : 'Internal Diagnostic';
                 
                 item.innerHTML = `
-                    <a href="${res.source_link || '#'}" target="_blank" rel="noreferrer">${res.title}</a>
-                    <p>${res.snippet}</p>
+                    <a href="${res.source_link || '#'}" target="_blank" rel="noreferrer">${res.title || 'Untitled'}</a>
+                    <p>${res.snippet || 'No details available.'}</p>
                     <span class="evidence-source-tag">${urlObj}</span>
                 `;
                 eviContainer.appendChild(item);
@@ -152,12 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         /* 3. DECISION DOM UPDATES */
-        document.getElementById('final-answer').textContent = data.decision.best_answer;
+        document.getElementById('final-answer').textContent = data.decision.best_answer || "No conclusion synthesized.";
         
         // Reasoning Tracer
         const traceList = document.getElementById('reasoning-chain');
         traceList.innerHTML = '';
-        data.decision.reasoning_chain.forEach(rc => {
+        (data.decision.reasoning_chain || []).forEach(rc => {
             const li = document.createElement('li');
             li.textContent = rc;
             traceList.appendChild(li);
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Anomalies / Alternatives
         const altList = document.getElementById('alternative-viewpoints');
         altList.innerHTML = '';
-        data.decision.alternative_viewpoints.forEach(av => {
+        (data.decision.alternative_viewpoints || []).forEach(av => {
             const li = document.createElement('li');
             li.textContent = av;
             altList.appendChild(li);
