@@ -35,8 +35,8 @@ def run_planner(query):
     
     search_strategies = [
         query,  # Base query
-        f"{core_concept} overview summary", # Broad
-        f"{core_concept} recent developments insights" # Context
+        f"{core_concept} analysis", # Broad
+        f"{core_concept} latest news" # Context
     ]
     
     # Optional constraint: limit to 3 strategies to save latency
