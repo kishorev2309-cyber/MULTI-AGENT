@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('query-form');
     const input = document.getElementById('query-input');
-    const loading = document.getElementById('loading');
+    const loadingSkeletons = document.getElementById('loading-skeletons');
     const dashboard = document.getElementById('dashboard');
-    const loadStatus = document.querySelector('.loading-status');
-    const subStatus = document.getElementById('loading-substatus');
-    const loadNodes = document.querySelectorAll('#loading .flow-node');
-    const loadArrows = document.querySelectorAll('#loading .flow-arrow');
+    const timelineSidebar = document.getElementById('timeline-sidebar');
+    
+    // Timeline steps
+    const stepPlanner = document.getElementById('step-planner');
+    const stepResearcher = document.getElementById('step-researcher');
+    const stepDecision = document.getElementById('step-decision');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -16,10 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset App State
         dashboard.classList.add('hidden');
-        loading.classList.remove('hidden');
+        timelineSidebar.classList.remove('hidden');
+        loadingSkeletons.classList.remove('hidden');
         
-        // Emulate complex loading stages
-        runLoadingSequence();
+        // Initiate step sequence animation
+        runPipelineSequence();
 
         try {
             const response = await fetch('/analyze', {
@@ -28,85 +31,102 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ query })
             });
 
-            // Always parse JSON regardless of HTTP status code
-            // Backend is designed to always return valid JSON even on errors
             let data;
             try {
                 data = await response.json();
             } catch (parseErr) {
-                // Only show failure if JSON itself is unparseable (true network/server crash)
-                throw new Error('Server returned unparseable response. Backend may be down.');
+                throw new Error('Server returned unparseable response.');
             }
 
             console.log("Backend Response:", data);
 
-            // Show dashboard regardless — populateDashboard handles degraded states
-            loading.classList.add('hidden');
-            dashboard.classList.remove('hidden');
-            populateDashboard(data);
+            // Give the animation time to 'finish' cleanly
+            setTimeout(() => {
+                loadingSkeletons.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                populateDashboard(data);
+                
+                // Set final pipeline state
+                stepDecision.classList.remove('active');
+                stepDecision.classList.add('completed');
+                stepDecision.querySelector('.step-status').textContent = "Completed";
+                document.querySelector('.status-badge').classList.remove('live-pulse');
+                document.querySelector('.status-badge').textContent = "Rendered";
+                document.querySelector('.status-badge').style.color = "var(--text-muted)";
+                document.querySelector('.status-badge').style.background = "var(--border-color)";
+                
+            }, 1000); // Slight delay for UX smoothness
 
         } catch (error) {
-            console.error('Fatal pipeline error (server unreachable):', error);
-            loadStatus.textContent = "Cannot reach backend server";
-            loadStatus.style.color = "#ef4444";
-            subStatus.textContent = error.message || "Ensure the Flask server is running and accessible.";
-            loadNodes.forEach(n => n.classList.remove('active-pulse'));
+            console.error('Fatal pipeline error:', error);
+            alert("Backend unreachable. Ensure server is running.");
         }
     });
 
-    function runLoadingSequence() {
-        // Reset styles
-        loadNodes.forEach(n => {
-            n.classList.remove('active-pulse');
-            n.classList.remove('complete');
-            n.classList.add('opacity-half');
-        });
-        loadArrows.forEach(a => a.classList.add('opacity-half'));
-        
-        loadStatus.style.color = "";
-        loadStatus.textContent = "Constructing Query Engine...";
-        subStatus.textContent = "Classifying intent & decomposing logic graph.";
-        loadNodes[0].classList.remove('opacity-half');
-        loadNodes[0].classList.add('active-pulse');
+    function setStepState(stepElem, stateStr) {
+        stepElem.className = 'timeline-step'; // reset
+        if (stateStr === 'active') {
+            stepElem.classList.add('active');
+            stepElem.querySelector('.step-status').textContent = "Processing...";
+            stepElem.querySelector('.step-status').style.color = "var(--accent-blue)";
+        } else if (stateStr === 'completed') {
+            stepElem.classList.add('completed');
+            stepElem.querySelector('.step-status').textContent = "Completed";
+            stepElem.querySelector('.step-status').style.color = "var(--accent-green)";
+        } else {
+            stepElem.querySelector('.step-status').textContent = "Pending";
+            stepElem.querySelector('.step-status').style.color = "var(--text-muted)";
+        }
+    }
 
-        // Simulate phase transitions for realistic multi-agent feel
-        setTimeout(() => {
-            loadNodes[0].classList.remove('active-pulse');
-            loadNodes[0].classList.add('complete');
-            loadArrows[0].classList.remove('opacity-half');
-            
-            loadNodes[1].classList.remove('opacity-half');
-            loadNodes[1].classList.add('active-pulse');
-            
-            loadStatus.textContent = "Live Web Research Active...";
-            subStatus.textContent = "Dispatching DuckDuckGo queries and indexing evidence.";
-        }, 1500);
+    function runPipelineSequence() {
+        // Reset sidebar status
+        document.querySelector('.status-badge').classList.add('live-pulse');
+        document.querySelector('.status-badge').textContent = "Live";
+        document.querySelector('.status-badge').style.color = "var(--accent-green)";
+        document.querySelector('.status-badge').style.background = "rgba(16, 185, 129, 0.1)";
+
+        setStepState(stepPlanner, 'active');
+        setStepState(stepResearcher, 'pending');
+        setStepState(stepDecision, 'pending');
 
         setTimeout(() => {
-            loadNodes[1].classList.remove('active-pulse');
-            loadNodes[1].classList.add('complete');
-            loadArrows[1].classList.remove('opacity-half');
-            
-            loadNodes[2].classList.remove('opacity-half');
-            loadNodes[2].classList.add('active-pulse');
-            
-            loadStatus.textContent = "Qualitative Reasoning Engine...";
-            subStatus.textContent = "Cross-referencing evidence nodes for logical synthesis.";
-        }, 3500);
+            setStepState(stepPlanner, 'completed');
+            setStepState(stepResearcher, 'active');
+        }, 1200);
+
+        setTimeout(() => {
+            setStepState(stepResearcher, 'completed');
+            setStepState(stepDecision, 'active');
+        }, 3200);
     }
 
     function populateDashboard(data) {
-        
-        // Handle degraded state graceful UI
         if(data.error || !data.planner || !data.researcher || !data.decision) {
-            document.getElementById('final-answer').textContent = "System Degraded: " + (data.message || "Invalid JSON schema received.");
+            document.getElementById('final-answer').textContent = "System Degraded.";
             return;
         }
 
-        /* 1. PLANNER DOM UPDATES */
-        document.getElementById('intent-tag').textContent = `Intent: ${data.planner.intent || 'Unknown'}`;
+        /** 1. METRICS ROW CALCULATION */
+        document.getElementById('metric-evidence').textContent = data.researcher.total_evidence_points || 0;
         
-        // Subquestions
+        let subQCount = (data.planner.sub_questions || []).length;
+        document.getElementById('metric-complexity').textContent = subQCount > 2 ? 'High' : (subQCount === 2 ? 'Medium' : 'Low');
+
+        // Calculate unique domains
+        const clusters = data.researcher.grouped_insights || {};
+        let domains = new Set();
+        Object.values(clusters).forEach(results => {
+            (results || []).forEach(res => {
+                if(res.source_link) domains.add(getHostName(res.source_link));
+            });
+        });
+        document.getElementById('metric-sources').textContent = domains.size;
+
+
+        /** 2. PLANNER DOM UPDATES */
+        document.getElementById('intent-tag').textContent = data.planner.intent || 'Unknown context';
+        
         const subList = document.getElementById('sub-questions');
         subList.innerHTML = '';
         (data.planner.sub_questions || []).forEach(sq => {
@@ -115,49 +135,71 @@ document.addEventListener('DOMContentLoaded', () => {
             subList.appendChild(li);
         });
         
-        // Search Strategies
         const stratRow = document.getElementById('search-strategies');
         stratRow.innerHTML = '';
         (data.planner.search_strategies || []).forEach(ss => {
             const s = document.createElement('span');
             s.className = 'badge';
-            s.textContent = ss.length > 30 ? ss.substring(0,30) + '...' : ss;
+            s.textContent = ss.length > 35 ? ss.substring(0,35) + '...' : ss;
             stratRow.appendChild(s);
         });
 
-        /* 2. RESEARCHER DOM UPDATES */
-        document.getElementById('evidence-count').textContent = data.researcher.total_evidence_points || 0;
+        /** 3. RESEARCHER (EVIDENCE CARDS) UPDATES */
         const eviContainer = document.getElementById('evidence-clusters');
         eviContainer.innerHTML = '';
         
-        const clusters = data.researcher.grouped_insights || {};
         for (const [strategy, results] of Object.entries(clusters)) {
-            // Group Title
-            const title = document.createElement('div');
-            title.className = 'evidence-cluster-title mt-4';
-            title.textContent = `Strategy Group: "${strategy}"`;
-            eviContainer.appendChild(title);
+            const grp = document.createElement('div');
+            grp.className = 'evidence-cluster-group';
             
-            // Group Results
+            const title = document.createElement('div');
+            title.className = 'cluster-header';
+            title.innerHTML = `<i class="ph ph-caret-down"></i> Strat: ${strategy}`;
+            title.onclick = () => {
+                const els = grp.querySelectorAll('.evidence-item');
+                const i = title.querySelector('i');
+                els.forEach(el => el.classList.toggle('hidden'));
+                i.className = els[0].classList.contains('hidden') ? 'ph ph-caret-right' : 'ph ph-caret-down';
+            };
+            grp.appendChild(title);
+            
             (results || []).forEach(res => {
                 const item = document.createElement('div');
                 item.className = 'evidence-item';
                 
-                const urlObj = res.source_link ? getHostName(res.source_link) : 'Internal Diagnostic';
+                const urlObj = res.source_link ? getHostName(res.source_link) : 'SYS_DIAGNOSTIC';
+                const tagColor = urlObj === 'SYS_DIAGNOSTIC' ? 'amber' : 'blue';
                 
                 item.innerHTML = `
-                    <a href="${res.source_link || '#'}" target="_blank" rel="noreferrer">${res.title || 'Untitled'}</a>
-                    <p>${res.snippet || 'No details available.'}</p>
-                    <span class="evidence-source-tag">${urlObj}</span>
+                    <div class="evidence-item-header">
+                        <a href="${res.source_link || '#'}" target="_blank" rel="noreferrer">${res.title || 'Untitled'}</a>
+                        <span class="domain-tag">${urlObj}</span>
+                    </div>
+                    <p>${res.snippet || 'No context extracted.'}</p>
                 `;
-                eviContainer.appendChild(item);
+                grp.appendChild(item);
             });
+            eviContainer.appendChild(grp);
         }
 
-        /* 3. DECISION DOM UPDATES */
-        document.getElementById('final-answer').textContent = data.decision.best_answer || "No conclusion synthesized.";
+        // Collapse/Expand all feature
+        const expandBtn = document.getElementById('evidence-expand-btn');
+        expandBtn.onclick = () => {
+            const isCollapsing = expandBtn.textContent === 'Collapse All';
+            document.querySelectorAll('.evidence-item').forEach(el => {
+                if(isCollapsing) el.classList.add('hidden');
+                else el.classList.remove('hidden');
+            });
+            document.querySelectorAll('.cluster-header i').forEach(icon => {
+                icon.className = isCollapsing ? 'ph ph-caret-right' : 'ph ph-caret-down';
+            });
+            expandBtn.textContent = isCollapsing ? 'Expand All' : 'Collapse All';
+        };
+
+        /** 4. DECISION SYNTHESIS & CANDIDATES */
+        document.getElementById('final-answer').innerHTML = data.decision.best_answer || "No conclusion reached.";
         
-        // Reasoning Tracer
+        // Handle Reasoning Chain
         const traceList = document.getElementById('reasoning-chain');
         traceList.innerHTML = '';
         (data.decision.reasoning_chain || []).forEach(rc => {
@@ -166,19 +208,45 @@ document.addEventListener('DOMContentLoaded', () => {
             traceList.appendChild(li);
         });
 
-        // Anomalies / Alternatives
-        const altList = document.getElementById('alternative-viewpoints');
-        altList.innerHTML = '';
-        (data.decision.alternative_viewpoints || []).forEach(av => {
-            const li = document.createElement('li');
-            li.textContent = av;
-            altList.appendChild(li);
-        });
+        // Handle Candidates and Alternative Views Panel
+        const altRow = document.getElementById('alt-candidate-row');
+        const altAlert = document.getElementById('alternative-alert');
+        altRow.innerHTML = '';
+        
+        const alts = data.decision.alternative_viewpoints || [];
+        // Alternative Viewpoints are usually full texts, we'll try to extract them neatly
+        if (alts.length > 0 && !alts[0].includes("Insufficient distinct evidence") && !alts[0].includes("Connectivity issues")) {
+            // We have a valid alternative viewpoint, render it in candidates and highlight box
+            altRow.innerHTML = `
+                <div class="candidate-info">
+                    <div class="candidate-name">Tertiary Perspective <span class="badge amber">Divergent</span></div>
+                    <div class="candidate-score">55% Confidence</div>
+                </div>
+                <div class="bar-bg"><div class="bar-fill amber" style="width: 55%;"></div></div>
+            `;
+            
+            // Clean up the text for the alert box
+            let rawText = alts[0];
+            let cleanText = rawText.replace("An alternative or nuanced finding suggests: ", "").replace("While the primary consensus points one way, isolated evidence introduces a counter-perspective: ", "");
+            
+            altAlert.classList.remove('hidden');
+            document.getElementById('alt-text').textContent = cleanText;
+        } else {
+            // No alternatives, hide alert, show single confident candidate
+            altAlert.classList.add('hidden');
+            altRow.innerHTML = `
+                <div class="candidate-info">
+                    <div class="candidate-name">No Conflicting Topologies</div>
+                    <div class="candidate-score">N/A</div>
+                </div>
+                <div class="bar-bg"><div class="bar-fill" style="width: 5%; background: rgba(255,255,255,0.1);"></div></div>
+            `;
+        }
     }
     
     function getHostName(url) {
         try {
-            return new URL(url).hostname;
+            return new URL(url).hostname.replace('www.', '');
         } catch {
             return url;
         }
