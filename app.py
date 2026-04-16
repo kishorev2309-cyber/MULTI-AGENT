@@ -4,6 +4,11 @@ from agents.planner import run_planner
 from agents.researcher import run_researcher
 from agents.decision import run_decision
 
+@app.route("/analyze", methods=["POST"])
+def analyze():
+    data = request.json
+    return jsonify({"status": "ok"})
+    
 app = Flask(__name__)
 
 @app.route('/')
