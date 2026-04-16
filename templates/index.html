@@ -3,206 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise AI Intelligence Framework</title>
+    <meta name="description" content="Explainable Multi-Agent Cognitive Reasoning Framework — live web evidence analysis powered by transparent AI agents.">
+    <title>Cognitive Reasoning Engine — Enterprise AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lightweight Phosphor Icons for professional UI cues -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-    <div class="app-container">
-        
-        <!-- Left Sidebar: Reasoning Timeline -->
-        <aside class="timeline-sidebar hidden" id="timeline-sidebar">
-            <div class="sidebar-header">
-                <h2>Execution Pipeline</h2>
-                <span class="status-badge live-pulse">Live</span>
-            </div>
-            
-            <div class="timeline-container">
-                <!-- Planner Step -->
-                <div class="timeline-step" id="step-planner">
-                    <div class="step-indicator">
-                        <div class="step-icon"><i class="ph ph-brain"></i></div>
-                        <div class="step-line"></div>
-                    </div>
-                    <div class="step-content">
-                        <h3>1. Query Decomposition</h3>
-                        <p class="step-status">Pending</p>
-                    </div>
-                </div>
+<div class="app-container">
 
-                <!-- Researcher Step -->
-                <div class="timeline-step" id="step-researcher">
-                    <div class="step-indicator">
-                        <div class="step-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
-                        <div class="step-line"></div>
-                    </div>
-                    <div class="step-content">
-                        <h3>2. Live Evidence Retrieval</h3>
-                        <p class="step-status">Pending</p>
-                    </div>
-                </div>
+    <!-- ─── SIDEBAR ──────────────────────────────── -->
+    <aside class="timeline-sidebar hidden" id="timeline-sidebar">
+        <div class="sidebar-header">
+            <h2>Execution Pipeline</h2>
+            <span class="status-badge live-pulse" id="pipeline-status">Live</span>
+        </div>
 
-                <!-- Decision Step -->
-                <div class="timeline-step" id="step-decision">
-                    <div class="step-indicator">
-                        <div class="step-icon"><i class="ph ph-check-circle"></i></div>
-                    </div>
-                    <div class="step-content">
-                        <h3>3. Cognitive Synthesis</h3>
-                        <p class="step-status">Pending</p>
-                    </div>
+        <div class="timeline-container">
+            <div class="timeline-step" id="step-planner">
+                <div class="step-indicator">
+                    <div class="step-icon"><i class="ph ph-brain"></i></div>
+                    <div class="step-line"></div>
                 </div>
-            </div>
-        </aside>
-
-        <!-- Main Interface -->
-        <main class="main-content">
-            <header class="top-search-area">
-                <h1>Cognitive Reasoning Engine</h1>
-                <p>Transparent Multi-Agent Validation & Inference</p>
-                <form id="query-form">
-                    <div class="input-glass-wrapper">
-                        <i class="ph ph-magnifying-glass search-icon"></i>
-                        <input type="text" id="query-input" placeholder="Query the observability framework..." required>
-                        <button type="submit" id="submit-btn">Execute Pipeline <i class="ph ph-arrow-right"></i></button>
-                    </div>
-                </form>
-            </header>
-
-            <!-- Loading State Skeletons -->
-            <div id="loading-skeletons" class="hidden">
-                <div class="skeleton-metrics">
-                    <div class="skeleton-box"></div>
-                    <div class="skeleton-box"></div>
-                    <div class="skeleton-box"></div>
-                </div>
-                <div class="skeleton-layout">
-                    <div class="skeleton-col">
-                        <div class="skeleton-card tall"></div>
-                        <div class="skeleton-card"></div>
-                    </div>
-                    <div class="skeleton-col">
-                        <div class="skeleton-card giant"></div>
-                    </div>
+                <div class="step-content">
+                    <h3>Query Decomposition</h3>
+                    <p class="step-status">Pending</p>
                 </div>
             </div>
 
-            <!-- Dynamic Dashboard -->
-            <div id="dashboard" class="hidden">
-                <!-- Insight Metrics Panel -->
-                <div class="metrics-row">
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="ph ph-stack"></i></div>
-                        <div class="metric-data">
-                            <span class="metric-value" id="metric-evidence">0</span>
-                            <span class="metric-label">Data Points Inspected</span>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="ph ph-browser"></i></div>
-                        <div class="metric-data">
-                            <span class="metric-value" id="metric-sources">0</span>
-                            <span class="metric-label">Unique Domains Analyzed</span>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="ph ph-graph"></i></div>
-                        <div class="metric-data">
-                            <span class="metric-value" id="metric-complexity">Low</span>
-                            <span class="metric-label">Query Vector Complexity</span>
-                        </div>
+            <div class="timeline-step" id="step-researcher">
+                <div class="step-indicator">
+                    <div class="step-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step-content">
+                    <h3>Live Evidence Retrieval</h3>
+                    <p class="step-status">Pending</p>
+                </div>
+            </div>
+
+            <div class="timeline-step" id="step-decision">
+                <div class="step-indicator">
+                    <div class="step-icon"><i class="ph ph-circuit-board"></i></div>
+                </div>
+                <div class="step-content">
+                    <h3>Cognitive Synthesis</h3>
+                    <p class="step-status">Pending</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─────────────────────────── -->
+    <main class="main-content">
+
+        <!-- SEARCH HEADER -->
+        <header class="top-search-area">
+            <h1>Cognitive Reasoning Engine</h1>
+            <p>Transparent Multi-Agent Validation &amp; Evidence Synthesis</p>
+            <form id="query-form">
+                <div class="input-glass-wrapper">
+                    <i class="ph ph-magnifying-glass search-icon"></i>
+                    <input
+                        type="text"
+                        id="query-input"
+                        placeholder="Enter your research query…"
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" id="submit-btn">
+                        Run Pipeline <i class="ph ph-play"></i>
+                    </button>
+                </div>
+            </form>
+        </header>
+
+        <!-- SKELETON LOADERS -->
+        <div id="loading-skeletons" class="hidden">
+            <div class="skeleton-metrics">
+                <div class="skeleton-box"></div>
+                <div class="skeleton-box"></div>
+                <div class="skeleton-box"></div>
+            </div>
+            <div class="skeleton-layout">
+                <div class="skeleton-col">
+                    <div class="skeleton-card tall"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+                <div class="skeleton-col">
+                    <div class="skeleton-card giant"></div>
+                    <div class="skeleton-card tall"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div id="dashboard" class="hidden">
+
+            <!-- METRICS STRIP -->
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="ph ph-stack"></i></div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-evidence">—</span>
+                        <span class="metric-label">Data Points Inspected</span>
                     </div>
                 </div>
-
-                <div class="dashboard-grid">
-                    <!-- Column 1: Context & Candidates -->
-                    <div class="left-panel">
-                        
-                        <!-- Candidate Visualization -->
-                        <div class="glass-card candidate-card">
-                            <div class="card-header">
-                                <h2><i class="ph ph-chart-bar"></i> Candidate Syntheses</h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="candidate-row winner">
-                                    <div class="candidate-info">
-                                        <div class="candidate-name">Optimal Resolution <span class="badge green">Selected</span></div>
-                                        <div class="candidate-score">95% Confidence</div>
-                                    </div>
-                                    <div class="bar-bg"><div class="bar-fill green" style="width: 95%;"></div></div>
-                                </div>
-                                <div class="candidate-row" id="alt-candidate-row">
-                                    <!-- Populated dynamically via JS if alt interpretations exist -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Planner Decomposition -->
-                        <div class="glass-card mt-4">
-                            <div class="card-header">
-                                <h2><i class="ph ph-tree-structure"></i> Intent Extraction Topology</h2>
-                                <span class="badge blue" id="intent-tag">Intent mapping</span>
-                            </div>
-                            <div class="card-body">
-                                <h4>Extracted Sub-Vectors</h4>
-                                <ul id="sub-questions" class="minimal-list"></ul>
-                                
-                                <h4 class="mt-4">Search Trajectories</h4>
-                                <div id="search-strategies" class="badge-row"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Reasoning Trace Array -->
-                        <div class="glass-card mt-4">
-                            <div class="card-header border-bottom">
-                                <h2><i class="ph ph-code"></i> Logic Sequence Log</h2>
-                            </div>
-                            <div class="card-body code-body">
-                                <ul id="reasoning-chain" class="step-trace-list slim"></ul>
-                            </div>
-                        </div>
-
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="ph ph-planet"></i></div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-sources">—</span>
+                        <span class="metric-label">Unique Domains Scraped</span>
                     </div>
-
-                    <!-- Column 2: Decision & Evidence -->
-                    <div class="right-panel">
-                        <!-- Huge Glow Conclusion Panel -->
-                        <div class="glass-card decision-supreme-card">
-                            <div class="decision-header">
-                                <div class="badge-tag"><i class="ph ph-robot"></i> Synthesis Engine Render</div>
-                            </div>
-                            <div class="card-body large-text syntax-box">
-                                <p id="final-answer" class="text-glow"></p>
-                            </div>
-                            <!-- Alternative Interpretation alert if available -->
-                            <div class="alternative-alert hidden" id="alternative-alert">
-                                <i class="ph ph-warning-circle"></i> 
-                                <span><strong>Tertiary Divergence Detected:</strong> <span id="alt-text"></span></span>
-                            </div>
-                        </div>
-
-                        <!-- Live Evidence Cluster UI -->
-                        <div class="glass-card researcher-card mt-4">
-                            <div class="card-header">
-                                <h2><i class="ph ph-database"></i> Live Evidence Clusters</h2>
-                                <span id="evidence-expand-btn" class="text-btn">Collapse All</span>
-                            </div>
-                            <div class="card-body padding-0">
-                                <div id="evidence-clusters" class="evidence-scroll-area">
-                                    <!-- Populated via JS -->
-                                </div>
-                            </div>
-                        </div>
-
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="ph ph-chart-line-up"></i></div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-complexity">—</span>
+                        <span class="metric-label">Query Vector Complexity</span>
                     </div>
                 </div>
             </div>
-            
-        </main>
-    </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+            <!-- TWO-COLUMN GRID -->
+            <div class="dashboard-grid">
+
+                <!-- LEFT COLUMN -->
+                <div class="left-panel">
+
+                    <!-- Candidate Syntheses -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="ph ph-chart-bar-horizontal"></i> Candidate Syntheses</h2>
+                            <span class="badge blue" id="evidence-status-badge">Analyzing…</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="candidate-list" id="candidate-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intent Extraction -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="ph ph-tree-structure"></i> Intent Extraction</h2>
+                            <span class="badge purple" id="intent-tag">—</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="section-label">Sub-Question Decomposition</p>
+                            <ul id="sub-questions" class="minimal-list"></ul>
+
+                            <p class="section-label mt-md">Search Trajectories</p>
+                            <div id="search-strategies" class="strategy-badges"></div>
+                        </div>
+                    </div>
+
+                    <!-- Logic Sequence Log -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="ph ph-terminal-window"></i> Logic Sequence Log</h2>
+                        </div>
+                        <div class="card-body">
+                            <ul id="reasoning-chain" class="trace-list"></ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="right-panel">
+
+                    <!-- AI Conclusion -->
+                    <div class="glass-card decision-supreme-card">
+                        <div class="decision-header">
+                            <span class="ai-badge"><i class="ph ph-robot"></i> Selected by Reasoning Engine</span>
+                            <span class="badge green" id="confidence-badge">High Confidence</span>
+                        </div>
+                        <div class="card-body">
+                            <p id="final-answer" class="final-answer-text"></p>
+                        </div>
+                        <div class="alternative-alert hidden" id="alternative-alert">
+                            <i class="ph ph-warning-circle"></i>
+                            <span>
+                                <strong>Tertiary Divergence Detected:</strong>
+                                <span id="alt-text"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Live Evidence Clusters -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="ph ph-database"></i> Live Evidence Clusters</h2>
+                            <span id="evidence-expand-btn" class="text-btn">Collapse All</span>
+                        </div>
+                        <div class="evidence-scroll-area" id="evidence-clusters">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
